@@ -37,6 +37,15 @@ Indikativ *und* Perfekt Konjunktiv). Solche Formen sind zu **einer** Karte
 zusammengefasst; **beide** Bestimmungen zählen als richtig, und die Rückmeldung
 nennt die jeweils andere.
 
+## Paradigma in der Auflösung
+
+Unter jeder Auflösung steht klein die Tabelle, in der die Form sitzt — Zeilen die
+sechs Personen, Spalten die fünf Konjugationen (bei *esse* die Tempora). Die
+abgefragte Zelle ist rot umrandet, Zeilen- und Spaltenkopf mit hervorgehoben, so
+dass die Form sofort im Zusammenhang steht. Bei mehrdeutigen Formen erscheint je
+eine Tabelle pro Lesart. Über *ausblenden* lässt sich das abschalten; die
+Einstellung bleibt gespeichert.
+
 ## Lernmechanik
 
 - Falsches wandert in derselben Runde nach vier Karten wieder in die Warteschlange
