@@ -1,0 +1,1159 @@
+<title>Coniugatio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500;600&family=Jost:wght@500;600;700&display=swap">
+<style>
+/* ---------- Tokens: two-colour print on photocopy paper ---------- */
+:root{
+  --paper:#EDEEEA; --card:#F8F9F6; --sunk:#E4E6E1;
+  --ink:#17191A; --ink-2:#4C5250; --ink-3:#7C8380;
+  --rule:#CBCEC7; --rule-2:#A9AEA6;
+  --red:#B0231C; --red-soft:#F2DCD9;
+  --good:#1E6B4B; --good-soft:#DAE8E0;
+  --shadow:0 1px 0 rgba(23,25,26,.06);
+  --f-display:'Jost',"Futura","Century Gothic",sans-serif;
+  --f-body:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --f-latin:'EB Garamond',Georgia,'Times New Roman',serif;
+  --wrap:640px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131614; --card:#1B1F1D; --sunk:#101312;
+    --ink:#E9EBE5; --ink-2:#A7AEA9; --ink-3:#79807C;
+    --rule:#2F3532; --rule-2:#454B47;
+    --red:#F2665A; --red-soft:#3A211F;
+    --good:#5FC08D; --good-soft:#163024;
+    --shadow:0 1px 0 rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131614; --card:#1B1F1D; --sunk:#101312;
+  --ink:#E9EBE5; --ink-2:#A7AEA9; --ink-3:#79807C;
+  --rule:#2F3532; --rule-2:#454B47;
+  --red:#F2665A; --red-soft:#3A211F;
+  --good:#5FC08D; --good-soft:#163024;
+  --shadow:0 1px 0 rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--f-body); font-size:15px; line-height:1.5;
+  padding-block:0 48px; padding-inline:18px;
+}
+img{max-width:100%}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--red); outline-offset:2px}
+
+.wrap{max-width:var(--wrap); margin-inline:auto}
+
+/* ---------- Header ---------- */
+.top{
+  display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;
+  border-bottom:1px solid var(--rule-2);
+  padding-block:18px 10px; margin-bottom:22px;
+}
+.mark{
+  font-family:var(--f-display); font-weight:700; font-size:19px;
+  letter-spacing:.14em; text-transform:uppercase; margin:0;
+  display:flex; align-items:center; gap:8px;
+}
+.mark::before{content:""; width:9px; height:9px; background:var(--red); display:block}
+nav.tabs{display:flex; gap:2px; margin-left:auto}
+nav.tabs button{
+  background:none; border:0; padding:5px 9px;
+  font-family:var(--f-display); font-weight:500; font-size:13px;
+  letter-spacing:.07em; text-transform:uppercase; color:var(--ink-3);
+  border-bottom:2px solid transparent;
+}
+nav.tabs button[aria-current="true"]{color:var(--ink); border-bottom-color:var(--red)}
+
+/* ---------- Generic bits ---------- */
+.eyebrow{
+  font-family:var(--f-display); font-weight:600; font-size:11px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); margin:0;
+}
+h2.sec{font-family:var(--f-display); font-weight:600; font-size:17px; letter-spacing:.02em; margin:0}
+.lede{color:var(--ink-2); margin:0; max-width:56ch}
+.stack{display:flex; flex-direction:column; gap:22px}
+.stack-s{display:flex; flex-direction:column; gap:9px}
+.rule{height:1px; background:var(--rule); border:0; margin:0}
+
+.chips{display:flex; flex-wrap:wrap; gap:6px}
+.chip{
+  background:var(--card); border:1px solid var(--rule-2); border-radius:2px;
+  padding:7px 12px; font-size:14px; font-weight:500; line-height:1.2;
+  transition:background .12s, color .12s, border-color .12s;
+}
+.chip[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.chip.sm{padding:5px 9px; font-size:12.5px; font-family:var(--f-display); letter-spacing:.03em}
+
+/* ---------- Start screen ---------- */
+.settings{display:flex; flex-direction:column; gap:12px; padding:14px 0; border-block:1px solid var(--rule)}
+.setrow{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.setrow > .eyebrow{width:96px; flex:none}
+
+.decks{display:grid; grid-template-columns:1fr; gap:0; border-top:1px solid var(--rule)}
+.deck{
+  display:block; width:100%; text-align:left; background:none;
+  border:0; border-bottom:1px solid var(--rule); padding:14px 2px;
+}
+.deck:hover .deck-name{color:var(--red)}
+.deck-head{display:flex; align-items:baseline; gap:10px}
+.deck-name{font-family:var(--f-display); font-weight:600; font-size:16px; transition:color .12s}
+.deck-n{margin-left:auto; font-size:12px; color:var(--ink-3); font-variant-numeric:tabular-nums}
+.bar{display:flex; height:5px; margin-top:9px; background:var(--sunk); gap:1px}
+.bar i{display:block; height:100%}
+.bar i.b0{background:var(--rule-2)} .bar i.b1{background:var(--red)}
+.bar i.b2{background:color-mix(in srgb,var(--red) 55%, var(--ink-3))}
+.bar i.b3{background:var(--ink-3)} .bar i.b4{background:color-mix(in srgb,var(--good) 60%, var(--ink-3))}
+.bar i.b5{background:var(--good)}
+.legend{display:flex; flex-wrap:wrap; gap:12px; font-size:12px; color:var(--ink-3)}
+.legend span{display:flex; align-items:center; gap:5px}
+.legend b{width:9px; height:9px; display:block}
+
+.legend b.lvl0{background:var(--rule-2)} .legend b.lvl1{background:var(--red)}
+.legend b.lvl2{background:color-mix(in srgb,var(--red) 55%, var(--ink-3))}
+.legend b.lvl3{background:var(--ink-3)}
+.legend b.lvl4{background:color-mix(in srgb,var(--good) 60%, var(--ink-3))}
+.legend b.lvl5{background:var(--good)}
+
+/* ---------- Drill ---------- */
+.meter{display:flex; align-items:center; gap:12px; font-size:12.5px; color:var(--ink-3); font-variant-numeric:tabular-nums}
+.meter .track{flex:1; height:3px; background:var(--sunk)}
+.meter .fill{height:100%; background:var(--red); transition:width .3s ease}
+
+.qcard{
+  background:var(--card); border:1px solid var(--rule-2); box-shadow:var(--shadow);
+  padding:30px 20px 26px; text-align:center; margin-block:16px;
+}
+.qcard .eyebrow{margin-bottom:12px}
+.form{
+  font-family:var(--f-latin); font-weight:600; font-size:clamp(38px,11vw,60px);
+  line-height:1.08; letter-spacing:-.005em; margin:0; overflow-wrap:anywhere;
+}
+.form .end{color:var(--red)}
+.form .sep{color:var(--rule-2); font-weight:500}
+.qmeta{font-size:12.5px; color:var(--ink-3); margin-top:12px; font-family:var(--f-display); letter-spacing:.05em; text-transform:uppercase}
+
+.qrow{display:grid; grid-template-columns:78px 1fr; gap:10px; align-items:start; padding:9px 0; border-bottom:1px solid var(--rule)}
+.qrow .eyebrow{padding-top:8px}
+.chip.ok{border-color:var(--good); background:var(--good-soft); color:var(--ink)}
+.chip.ok[aria-pressed="true"]{background:var(--good); color:var(--card); border-color:var(--good)}
+.chip.no[aria-pressed="true"]{background:var(--red-soft); color:var(--red); border-color:var(--red); text-decoration:line-through}
+
+.actions{display:flex; gap:10px; margin-top:18px; align-items:center}
+.btn{
+  border:1px solid var(--ink); background:var(--ink); color:var(--paper);
+  border-radius:2px; padding:12px 22px; font-family:var(--f-display);
+  font-weight:600; font-size:15px; letter-spacing:.05em;
+}
+.btn.primary{background:var(--red); border-color:var(--red); color:#fff}
+.btn[disabled]{opacity:.3; cursor:not-allowed}
+.btn.ghost{background:none; color:var(--ink-2); border-color:var(--rule-2); font-weight:500}
+
+.fb{border-top:3px solid var(--good); background:var(--card); padding:16px 16px 18px; margin-top:18px}
+.fb.wrong{border-top-color:var(--red)}
+.fb-verdict{font-family:var(--f-display); font-weight:700; font-size:15px; letter-spacing:.09em; text-transform:uppercase; color:var(--good)}
+.fb.wrong .fb-verdict{color:var(--red)}
+.fb-form{font-family:var(--f-latin); font-size:30px; font-weight:600; margin:6px 0 2px}
+.fb-an{font-size:14.5px; font-weight:500}
+.fb-de{font-family:var(--f-latin); font-style:italic; font-size:18px; color:var(--ink-2); margin-top:2px}
+.fb-note{font-size:13px; color:var(--ink-2); margin-top:10px; padding-top:10px; border-top:1px solid var(--rule)}
+.fb-note b{color:var(--ink); font-weight:600}
+.kbd{font-size:12px; color:var(--ink-3); margin-left:auto}
+
+/* ---------- Tables ---------- */
+.tblock{margin-bottom:26px}
+.tscroll{overflow-x:auto; border:1px solid var(--rule-2); background:var(--card)}
+table{border-collapse:collapse; width:100%; font-family:var(--f-latin); font-size:15.5px}
+th,td{border:1px solid var(--rule); padding:5px 9px; text-align:left; white-space:nowrap}
+thead th{
+  font-family:var(--f-display); font-size:11px; font-weight:600; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-2); background:var(--sunk); white-space:nowrap;
+}
+tbody th{
+  font-family:var(--f-display); font-size:11.5px; font-weight:500; color:var(--ink-3);
+  letter-spacing:.05em; background:var(--sunk);
+}
+.end{color:var(--red)}
+.sep{color:var(--rule-2)}
+.tcap{display:flex; align-items:baseline; gap:10px; margin-bottom:7px}
+.tcap .de{font-size:12.5px; color:var(--ink-3); font-family:var(--f-body)}
+
+/* ---------- Stats ---------- */
+.statgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); border-top:1px solid var(--rule); border-left:1px solid var(--rule)}
+.stat{border-right:1px solid var(--rule); border-bottom:1px solid var(--rule); padding:12px 14px}
+.stat .n{font-family:var(--f-display); font-weight:600; font-size:26px; line-height:1; font-variant-numeric:tabular-nums}
+.stat .l{font-size:11.5px; color:var(--ink-3); margin-top:4px; font-family:var(--f-display); letter-spacing:.08em; text-transform:uppercase}
+.worst{display:flex; flex-direction:column}
+.worst li{display:flex; align-items:baseline; gap:10px; padding:7px 0; border-bottom:1px solid var(--rule); list-style:none}
+.worst .w-form{font-family:var(--f-latin); font-size:19px; font-weight:600; min-width:9ch}
+.worst .w-an{font-size:12.5px; color:var(--ink-3)}
+.worst .w-t{margin-left:auto; font-size:12px; color:var(--red); font-variant-numeric:tabular-nums; white-space:nowrap}
+ul.worst{padding:0; margin:0}
+textarea{width:100%; min-height:80px; font-family:ui-monospace,Menlo,monospace; font-size:12px;
+  background:var(--card); color:var(--ink); border:1px solid var(--rule-2); border-radius:2px; padding:8px}
+
+.tally{display:flex; gap:2px; align-items:flex-end; height:64px; margin-top:6px}
+.tally div{flex:1; background:var(--rule-2); min-height:2px; position:relative}
+.tally div.t1{background:var(--good)} .tally div.t2{background:var(--ink-3)} .tally div.t3{background:var(--red)}
+.tally span{position:absolute; top:-16px; left:0; right:0; text-align:center; font-size:11px; color:var(--ink-3)}
+.tallylabels{display:flex; gap:2px; font-size:11px; color:var(--ink-3); margin-top:4px}
+.tallylabels div{flex:1; text-align:center}
+
+@media (max-width:420px){
+  .qrow{grid-template-columns:1fr; gap:4px}
+  .qrow .eyebrow{padding-top:0}
+  .setrow > .eyebrow{width:auto}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+<!--BODY-->
+<div class="wrap">
+  <header class="top">
+    <h1 class="mark">Coniugatio</h1>
+    <nav class="tabs">
+      <button id="tab-start" data-view="start" aria-current="true">Üben</button>
+      <button id="tab-tab" data-view="tables">Tabellen</button>
+      <button id="tab-stat" data-view="stats">Fortschritt</button>
+    </nav>
+  </header>
+
+  <!-- ============ START ============ -->
+  <section id="view-start" class="stack">
+    <div class="stack-s">
+      <p class="eyebrow">Formen bestimmen</p>
+      <p class="lede">Du bekommst eine Form, du bestimmst <b>Person, Numerus, Tempus, Modus</b> und <b>Genus verbi</b>. Falsches kommt in derselben Runde wieder, bis es sitzt.</p>
+    </div>
+
+    <div class="settings">
+      <div class="setrow">
+        <p class="eyebrow">Verb</p>
+        <div class="chips" id="f-verb"></div>
+      </div>
+      <div class="setrow">
+        <p class="eyebrow">Auswahl</p>
+        <div class="chips" id="f-mode"></div>
+      </div>
+      <div class="setrow">
+        <p class="eyebrow">Runde</p>
+        <div class="chips" id="f-size"></div>
+      </div>
+    </div>
+
+    <div class="stack-s">
+      <h2 class="sec">Kapitel</h2>
+      <div class="decks" id="decks"></div>
+      <div class="legend">
+        <span><b class="lvl0"></b>neu</span>
+        <span><b class="lvl1"></b>schwach</span>
+        <span><b class="lvl2"></b>wackelig</span>
+        <span><b class="lvl3"></b>solide</span>
+        <span><b class="lvl4"></b>sicher</span>
+        <span><b class="lvl5"></b>sitzt</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DRILL ============ -->
+  <section id="view-drill" hidden>
+    <div class="meter">
+      <span id="m-deck"></span>
+      <span class="track"><span class="fill" id="m-fill" style="width:0%"></span></span>
+      <span id="m-count">0/0</span>
+    </div>
+
+    <div class="qcard">
+      <p class="eyebrow" id="q-eyebrow">Bestimme die Form</p>
+      <p class="form" id="q-form">&nbsp;</p>
+      <p class="qmeta" id="q-meta"></p>
+    </div>
+
+    <div id="q-rows"></div>
+
+    <div id="q-fb" hidden></div>
+
+    <div class="actions">
+      <button class="btn primary" id="q-check" disabled>Prüfen</button>
+      <button class="btn ghost" id="q-quit">Beenden</button>
+      <span class="kbd" id="q-kbd">Enter = Prüfen</span>
+    </div>
+  </section>
+
+  <!-- ============ RESULT ============ -->
+  <section id="view-result" class="stack" hidden>
+    <div class="stack-s">
+      <p class="eyebrow">Runde beendet</p>
+      <h2 class="sec" id="r-title">&nbsp;</h2>
+    </div>
+    <div class="statgrid" id="r-stats"></div>
+    <div class="stack-s">
+      <p class="eyebrow">Versuche bis richtig</p>
+      <div class="tally" id="r-tally"></div>
+      <div class="tallylabels"><div>1×</div><div>2×</div><div>3×</div><div>4×</div><div>5×+</div></div>
+    </div>
+    <div class="stack-s" id="r-wrongbox">
+      <h2 class="sec">Das saß noch nicht</h2>
+      <ul class="worst" id="r-wrong"></ul>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="r-again">Fehler wiederholen</button>
+      <button class="btn ghost" id="r-new">Neue Runde</button>
+      <button class="btn ghost" id="r-menu">Menü</button>
+    </div>
+  </section>
+
+  <!-- ============ TABLES ============ -->
+  <section id="view-tables" class="stack" hidden>
+    <div class="stack-s">
+      <p class="eyebrow">Nachschlagen</p>
+      <p class="lede">Dieselben Tabellen wie auf deinem Blatt: Stamm schwarz, Personalendung <span style="color:var(--red)">rot</span>.</p>
+    </div>
+    <div class="chips" id="t-nav"></div>
+    <div id="t-body"></div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section id="view-stats" class="stack" hidden>
+    <div class="stack-s">
+      <p class="eyebrow">Fortschritt</p>
+      <h2 class="sec" id="s-head">&nbsp;</h2>
+    </div>
+    <div class="statgrid" id="s-grid"></div>
+    <div class="stack-s">
+      <h2 class="sec">Deine 20 wackeligsten Formen</h2>
+      <ul class="worst" id="s-worst"></ul>
+    </div>
+    <div class="stack-s">
+      <h2 class="sec">Sichern &amp; übertragen</h2>
+      <p class="lede">Der Fortschritt liegt in diesem Browser. Zum Mitnehmen den Text kopieren und auf dem anderen Gerät hier einfügen.</p>
+      <textarea id="s-io" spellcheck="false" aria-label="Fortschrittsdaten"></textarea>
+      <div class="actions" style="margin-top:0">
+        <button class="btn ghost" id="s-export">Fortschritt anzeigen</button>
+        <button class="btn ghost" id="s-import">Einfügen &amp; laden</button>
+        <button class="btn ghost" id="s-reset">Alles zurücksetzen</button>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+"use strict";
+
+/* =====================================================================
+   1. PARADIGMEN  —  abgetippt vom Übersichtsblatt
+   ===================================================================== */
+
+const CLASSES = {
+  a:{ name:"ā-Konjugation", short:"ā-Konj.",
+    praes_ind_akt:["ō","ās","at","āmus","ātis","ant"],
+    impf_ind_akt:["ābam","ābās","ābat","ābāmus","ābātis","ābant"],
+    futI_ind_akt:["ābō","ābis","ābit","ābimus","ābitis","ābunt"],
+    praes_konj_akt:["em","ēs","et","ēmus","ētis","ent"],
+    impf_konj_akt:["ārem","ārēs","āret","ārēmus","ārētis","ārent"],
+    praes_ind_pass:["or","āris","ātur","āmur","āminī","antur"],
+    impf_ind_pass:["ābar","ābāris","ābātur","ābāmur","ābāminī","ābantur"],
+    futI_ind_pass:["ābor","āberis","ābitur","ābimur","ābiminī","ābuntur"],
+    praes_konj_pass:["er","ēris","ētur","ēmur","ēminī","entur"],
+    impf_konj_pass:["ārer","ārēris","ārētur","ārēmur","ārēminī","ārentur"],
+    inf_akt:"āre", inf_pass:"ārī", imp_sg:"ā", imp_pl:"āte",
+    ger:"andī", gerv:"andus", part:"āns" },
+
+  e:{ name:"ē-Konjugation", short:"ē-Konj.",
+    praes_ind_akt:["eō","ēs","et","ēmus","ētis","ent"],
+    impf_ind_akt:["ēbam","ēbās","ēbat","ēbāmus","ēbātis","ēbant"],
+    futI_ind_akt:["ēbō","ēbis","ēbit","ēbimus","ēbitis","ēbunt"],
+    praes_konj_akt:["eam","eās","eat","eāmus","eātis","eant"],
+    impf_konj_akt:["ērem","ērēs","ēret","ērēmus","ērētis","ērent"],
+    praes_ind_pass:["eor","ēris","ētur","ēmur","ēminī","entur"],
+    impf_ind_pass:["ēbar","ēbāris","ēbātur","ēbāmur","ēbāminī","ēbantur"],
+    futI_ind_pass:["ēbor","ēberis","ēbitur","ēbimur","ēbiminī","ēbuntur"],
+    praes_konj_pass:["ear","eāris","eātur","eāmur","eāminī","eantur"],
+    impf_konj_pass:["ērer","ērēris","ērētur","ērēmur","ērēminī","ērentur"],
+    inf_akt:"ēre", inf_pass:"ērī", imp_sg:"ē", imp_pl:"ēte",
+    ger:"endī", gerv:"endus", part:"ēns" },
+
+  i:{ name:"ī-Konjugation", short:"ī-Konj.",
+    praes_ind_akt:["iō","īs","it","īmus","ītis","iunt"],
+    impf_ind_akt:["iēbam","iēbās","iēbat","iēbāmus","iēbātis","iēbant"],
+    futI_ind_akt:["iam","iēs","iet","iēmus","iētis","ient"],
+    praes_konj_akt:["iam","iās","iat","iāmus","iātis","iant"],
+    impf_konj_akt:["īrem","īrēs","īret","īrēmus","īrētis","īrent"],
+    praes_ind_pass:["ior","īris","ītur","īmur","īminī","iuntur"],
+    impf_ind_pass:["iēbar","iēbāris","iēbātur","iēbāmur","iēbāminī","iēbantur"],
+    futI_ind_pass:["iar","iēris","iētur","iēmur","iēminī","ientur"],
+    praes_konj_pass:["iar","iāris","iātur","iāmur","iāminī","iantur"],
+    impf_konj_pass:["īrer","īrēris","īrētur","īrēmur","īrēminī","īrentur"],
+    inf_akt:"īre", inf_pass:"īrī", imp_sg:"ī", imp_pl:"īte",
+    ger:"iendī", gerv:"iendus", part:"iēns" },
+
+  ic:{ name:"ĭ-Konjugation (kurzvokalisch)", short:"ĭ-Konj.",
+    praes_ind_akt:["iō","is","it","imus","itis","iunt"],
+    impf_ind_akt:["iēbam","iēbās","iēbat","iēbāmus","iēbātis","iēbant"],
+    futI_ind_akt:["iam","iēs","iet","iēmus","iētis","ient"],
+    praes_konj_akt:["iam","iās","iat","iāmus","iātis","iant"],
+    impf_konj_akt:["erem","erēs","eret","erēmus","erētis","erent"],
+    praes_ind_pass:["ior","eris","itur","imur","iminī","iuntur"],
+    impf_ind_pass:["iēbar","iēbāris","iēbātur","iēbāmur","iēbāminī","iēbantur"],
+    futI_ind_pass:["iar","iēris","iētur","iēmur","iēminī","ientur"],
+    praes_konj_pass:["iar","iāris","iātur","iāmur","iāminī","iantur"],
+    impf_konj_pass:["erer","erēris","erētur","erēmur","erēminī","erentur"],
+    inf_akt:"ere", inf_pass:"ī", imp_sg:"e", imp_pl:"ite",
+    ger:"iendī", gerv:"iendus", part:"iēns" },
+
+  k:{ name:"konsonantische Konjugation", short:"kons. Konj.",
+    praes_ind_akt:["ō","is","it","imus","itis","unt"],
+    impf_ind_akt:["ēbam","ēbās","ēbat","ēbāmus","ēbātis","ēbant"],
+    futI_ind_akt:["am","ēs","et","ēmus","ētis","ent"],
+    praes_konj_akt:["am","ās","at","āmus","ātis","ant"],
+    impf_konj_akt:["erem","erēs","eret","erēmus","erētis","erent"],
+    praes_ind_pass:["or","eris","itur","imur","iminī","untur"],
+    impf_ind_pass:["ēbar","ēbāris","ēbātur","ēbāmur","ēbāminī","ēbantur"],
+    futI_ind_pass:["ar","ēris","ētur","ēmur","ēminī","entur"],
+    praes_konj_pass:["ar","āris","ātur","āmur","āminī","antur"],
+    impf_konj_pass:["erer","erēris","erētur","erēmur","erēminī","erentur"],
+    inf_akt:"ere", inf_pass:"ī", imp_sg:"e", imp_pl:"ite",
+    ger:"endī", gerv:"endus", part:"ēns" }
+};
+
+/* Perfektstamm — für alle Konjugationen gleich */
+const PERF = {
+  perf_ind_akt:["ī","istī","it","imus","istis","ērunt"],
+  plqp_ind_akt:["eram","erās","erat","erāmus","erātis","erant"],
+  futII_ind_akt:["erō","eris","erit","erimus","eritis","erint"],
+  perf_konj_akt:["erim","eris","erit","erimus","eritis","erint"],
+  plqp_konj_akt:["issem","issēs","isset","issēmus","issētis","issent"],
+  inf_akt:"isse"
+};
+/* Passiv Perfektstamm = PPP + Form von esse */
+const PERF_AUX = {
+  perf_ind:["sum","es","est","sumus","estis","sunt"],
+  plqp_ind:["eram","erās","erat","erāmus","erātis","erant"],
+  futII_ind:["erō","eris","erit","erimus","eritis","erunt"],
+  perf_konj:["sim","sīs","sit","sīmus","sītis","sint"],
+  plqp_konj:["essem","essēs","esset","essēmus","essētis","essent"]
+};
+
+const VERBS = [
+  { id:"laudare", cls:"a",  root:"laud", perf:"laudāv", ppp:"laudāt",
+    head:"laudāre", kv:"laudō, laudāvī, laudātum", de:"loben",
+    g:{ inf:"loben", pres:["lobe","lobst","lobt","loben","lobt","loben"],
+        prat:["lobte","lobtest","lobte","lobten","lobtet","lobten"], pp:"gelobt" } },
+  { id:"delere", cls:"e",  root:"dēl", perf:"dēlēv", ppp:"dēlēt",
+    head:"dēlēre", kv:"dēleō, dēlēvī, dēlētum", de:"zerstören",
+    g:{ inf:"zerstören", pres:["zerstöre","zerstörst","zerstört","zerstören","zerstört","zerstören"],
+        prat:["zerstörte","zerstörtest","zerstörte","zerstörten","zerstörtet","zerstörten"], pp:"zerstört" } },
+  { id:"audire", cls:"i",  root:"aud", perf:"audīv", ppp:"audīt",
+    head:"audīre", kv:"audiō, audīvī, audītum", de:"hören",
+    g:{ inf:"hören", pres:["höre","hörst","hört","hören","hört","hören"],
+        prat:["hörte","hörtest","hörte","hörten","hörtet","hörten"], pp:"gehört" } },
+  { id:"capere", cls:"ic", root:"cap", perf:"cēp", ppp:"capt",
+    head:"capere", kv:"capiō, cēpī, captum", de:"nehmen",
+    g:{ inf:"nehmen", pres:["nehme","nimmst","nimmt","nehmen","nehmt","nehmen"],
+        prat:["nahm","nahmst","nahm","nahmen","nahmt","nahmen"], pp:"genommen" } },
+  { id:"regere", cls:"k",  root:"reg", perf:"rēx", ppp:"rēct",
+    head:"regere", kv:"regō, rēxī, rēctum", de:"leiten",
+    g:{ inf:"leiten", pres:["leite","leitest","leitet","leiten","leitet","leiten"],
+        prat:["leitete","leitetest","leitete","leiteten","leitetet","leiteten"], pp:"geleitet" } }
+];
+
+const ESSE = {
+  id:"esse", head:"esse", kv:"sum, fuī", de:"sein", cls:null,
+  praes_ind:["sum","es","est","sumus","estis","sunt"],
+  praes_konj:["sim","sīs","sit","sīmus","sītis","sint"],
+  impf_ind:["eram","erās","erat","erāmus","erātis","erant"],
+  impf_konj:["essem","essēs","esset","essēmus","essētis","essent"],
+  futI_ind:["erō","eris","erit","erimus","eritis","erunt"],
+  perf_ind:["fuī","fuistī","fuit","fuimus","fuistis","fuērunt"],
+  perf_konj:["fuerim","fueris","fuerit","fuerimus","fueritis","fuerint"],
+  plqp_ind:["fueram","fuerās","fuerat","fuerāmus","fuerātis","fuerant"],
+  plqp_konj:["fuissem","fuissēs","fuisset","fuissēmus","fuissētis","fuissent"],
+  futII_ind:["fuerō","fueris","fuerit","fuerimus","fueritis","fuerint"]
+};
+
+/* =====================================================================
+   2. LABELS + DEUTSCHE ÜBERSETZUNG
+   ===================================================================== */
+
+const T_LABEL  = { praes:"Präsens", impf:"Imperfekt", futI:"Futur I",
+                   perf:"Perfekt", plqp:"Plusquamperfekt", futII:"Futur II" };
+const T_SHORT  = { praes:"Präs.", impf:"Impf.", futI:"Fut. I",
+                   perf:"Perf.", plqp:"Plusqu.", futII:"Fut. II" };
+const M_LABEL  = { ind:"Indikativ", konj:"Konjunktiv" };
+const V_LABEL  = { akt:"Aktiv", pass:"Passiv" };
+const N_LABEL  = { sg:"Singular", pl:"Plural" };
+const N_SHORT  = { sg:"Sg.", pl:"Pl." };
+const P_LABEL  = ["1. Person","2. Person","3. Person"];
+const ROWS     = ["1. Sg.","2. Sg.","3. Sg.","1. Pl.","2. Pl.","3. Pl."];
+
+const PRON   = ["ich","du","er","wir","ihr","sie"];
+const WERDEN = ["werde","wirst","wird","werden","werdet","werden"];
+const WURDE  = ["wurde","wurdest","wurde","wurden","wurdet","wurden"];
+const WUERDE = ["würde","würdest","würde","würden","würdet","würden"];
+const MOEGE  = ["möge","mögest","möge","mögen","möget","mögen"];
+const HABEN  = ["habe","hast","hat","haben","habt","haben"];
+const HABEK  = ["habe","habest","habe","haben","habet","haben"];
+const HATTE  = ["hatte","hattest","hatte","hatten","hattet","hatten"];
+const HAETTE = ["hätte","hättest","hätte","hätten","hättet","hätten"];
+const SEIN   = ["bin","bist","ist","sind","seid","sind"];
+const SEI    = ["sei","seist","sei","seien","seiet","seien"];
+const WAR    = ["war","warst","war","waren","wart","waren"];
+const WAERE  = ["wäre","wärst","wäre","wären","wärt","wären"];
+
+function idx6(an){ return an.p + (an.n === "pl" ? 3 : 0); }
+
+function germanOf(verb, an){
+  const i = idx6(an), key = an.t + "_" + an.m;
+  if (verb.id === "esse"){
+    const m = {
+      praes_ind: SEIN[i], impf_ind: WAR[i], futI_ind: WERDEN[i]+" sein",
+      perf_ind: SEIN[i]+" gewesen", plqp_ind: WAR[i]+" gewesen",
+      futII_ind: WERDEN[i]+" gewesen sein",
+      praes_konj: SEI[i], impf_konj: WAERE[i],
+      perf_konj: SEI[i]+" gewesen", plqp_konj: WAERE[i]+" gewesen"
+    };
+    return PRON[i] + " " + m[key];
+  }
+  const g = verb.g;
+  const akt = {
+    praes_ind: g.pres[i], impf_ind: g.prat[i], futI_ind: WERDEN[i]+" "+g.inf,
+    perf_ind: HABEN[i]+" "+g.pp, plqp_ind: HATTE[i]+" "+g.pp,
+    futII_ind: WERDEN[i]+" "+g.pp+" haben",
+    praes_konj: MOEGE[i]+" "+g.inf, impf_konj: WUERDE[i]+" "+g.inf,
+    perf_konj: HABEK[i]+" "+g.pp, plqp_konj: HAETTE[i]+" "+g.pp
+  };
+  const pass = {
+    praes_ind: WERDEN[i]+" "+g.pp, impf_ind: WURDE[i]+" "+g.pp,
+    futI_ind: WERDEN[i]+" "+g.pp+" werden",
+    perf_ind: SEIN[i]+" "+g.pp+" worden", plqp_ind: WAR[i]+" "+g.pp+" worden",
+    futII_ind: WERDEN[i]+" "+g.pp+" worden sein",
+    praes_konj: MOEGE[i]+" "+g.pp+" werden", impf_konj: WUERDE[i]+" "+g.pp+" werden",
+    perf_konj: SEI[i]+" "+g.pp+" worden", plqp_konj: WAERE[i]+" "+g.pp+" worden"
+  };
+  return PRON[i] + " " + (an.v === "akt" ? akt : pass)[key];
+}
+
+/* =====================================================================
+   3. STAMM / ENDUNG TRENNEN  (schwarz | rot, wie auf dem Blatt)
+   ===================================================================== */
+
+const P_ACT  = [["ō","m"],["s"],["t"],["mus"],["tis"],["nt"]];
+const P_PASS = [["or","r"],["ris"],["tur"],["mur"],["minī"],["ntur"]];
+const P_PERF = [["ī"],["istī"],["it"],["imus"],["istis"],["ērunt"]];
+
+function splitForm(form, an){
+  if (form.indexOf(" ") > -1){                 // laudātus est
+    const k = form.lastIndexOf(" ");
+    return [form.slice(0, k), form.slice(k + 1)];
+  }
+  const i = idx6(an);
+  let set = P_ACT;
+  if (an.v === "pass") set = P_PASS;
+  if (an.t === "perf" && an.m === "ind" && an.v === "akt") set = P_PERF;
+  for (const e of set[i]){
+    if (form.length > e.length && form.endsWith(e)) return [form.slice(0, -e.length), e];
+  }
+  return [form, ""];
+}
+
+function renderForm(form, an, joiner){
+  const [s, e] = splitForm(form, an);
+  if (!e) return esc(form);
+  const sep = form.indexOf(" ") > -1 ? " " : (joiner === false ? "" : "‑");
+  return esc(s) + '<span class="sep">' + sep + '</span><span class="end">' + esc(e) + "</span>";
+}
+function esc(t){ return String(t).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+/* =====================================================================
+   4. ALLE FORMEN ERZEUGEN
+   ===================================================================== */
+
+const PRES_T = ["praes","impf","futI"];
+const PERF_T = ["perf","plqp","futII"];
+
+const ITEMS = [];
+const BY_ID = new Map();
+const VERB_BY_ID = new Map();
+
+(function build(){
+  const seen = new Map();
+  function add(verb, form, an){
+    const key = verb.id + "|" + form;
+    let it = seen.get(key);
+    if (!it){
+      it = { id:key, verb:verb.id, form:form, an:[] };
+      seen.set(key, it); ITEMS.push(it); BY_ID.set(key, it);
+    }
+    it.an.push(an);
+  }
+  const persons = [
+    {p:0,n:"sg"},{p:1,n:"sg"},{p:2,n:"sg"},
+    {p:0,n:"pl"},{p:1,n:"pl"},{p:2,n:"pl"}
+  ];
+
+  VERBS.forEach(v => {
+    VERB_BY_ID.set(v.id, v);
+    const c = CLASSES[v.cls];
+    // Präsensstamm
+    ["akt","pass"].forEach(voice => {
+      PRES_T.forEach(t => {
+        ["ind","konj"].forEach(m => {
+          if (t === "futI" && m === "konj") return;          // gibt es nicht
+          const key = t + "_" + m + "_" + voice;
+          const ends = c[key]; if (!ends) return;
+          persons.forEach((pn, i) => add(v, v.root + ends[i], {p:pn.p, n:pn.n, t:t, m:m, v:voice}));
+        });
+      });
+    });
+    // Perfektstamm Aktiv
+    PERF_T.forEach(t => {
+      ["ind","konj"].forEach(m => {
+        if (t === "futII" && m === "konj") return;
+        const ends = PERF[t + "_" + m + "_akt"]; if (!ends) return;
+        persons.forEach((pn, i) => add(v, v.perf + ends[i], {p:pn.p, n:pn.n, t:t, m:m, v:"akt"}));
+      });
+    });
+    // Perfektstamm Passiv (PPP + esse)
+    PERF_T.forEach(t => {
+      ["ind","konj"].forEach(m => {
+        if (t === "futII" && m === "konj") return;
+        const aux = PERF_AUX[t + "_" + m]; if (!aux) return;
+        persons.forEach((pn, i) => {
+          const part = v.ppp + (pn.n === "sg" ? "us" : "ī");
+          add(v, part + " " + aux[i], {p:pn.p, n:pn.n, t:t, m:m, v:"pass"});
+        });
+      });
+    });
+  });
+
+  // esse
+  VERB_BY_ID.set(ESSE.id, ESSE);
+  ["praes","impf","futI","perf","plqp","futII"].forEach(t => {
+    ["ind","konj"].forEach(m => {
+      const ends = ESSE[t + "_" + m]; if (!ends) return;
+      persons.forEach((pn, i) => add(ESSE, ends[i], {p:pn.p, n:pn.n, t:t, m:m, v:"akt"}));
+    });
+  });
+})();
+</script>
+<script>
+"use strict";
+
+/* =====================================================================
+   5. SPEICHER
+   ===================================================================== */
+const KEY = "coniugatio-v1";
+let PROG = {};
+try { PROG = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { PROG = {}; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(PROG)); } catch (e) {} }
+function rec(id){
+  if (!PROG[id]) PROG[id] = { b:0, s:0, r:0, w:0, lt:0, ts:0 };
+  return PROG[id];
+}
+function box(id){ const p = PROG[id]; return p ? p.b : 0; }
+function seenCt(id){ const p = PROG[id]; return p ? p.s : 0; }
+
+const LVL = ["neu","schwach","wackelig","solide","sicher","sitzt"];
+
+/* Schnellzugriff Form -> Tabelle */
+const IDX = {};
+ITEMS.forEach(it => it.an.forEach(a => {
+  IDX[it.verb + "|" + a.t + "_" + a.m + "_" + a.v + "|" + idx6(a)] = it.form;
+}));
+function cell(verbId, t, m, v, i){ return IDX[verbId + "|" + t + "_" + m + "_" + v + "|" + i] || ""; }
+
+/* =====================================================================
+   6. KAPITEL
+   ===================================================================== */
+const DECKS = [
+  { id:"pa", name:"Präsensstamm Aktiv",  hint:"Präsens · Imperfekt · Futur I",
+    f:a => PRES_T.indexOf(a.t) > -1 && a.v === "akt" },
+  { id:"pp", name:"Präsensstamm Passiv", hint:"Präsens · Imperfekt · Futur I",
+    f:a => PRES_T.indexOf(a.t) > -1 && a.v === "pass" },
+  { id:"ka", name:"Perfektstamm Aktiv",  hint:"Perfekt · Plusquamperfekt · Futur II",
+    f:a => PERF_T.indexOf(a.t) > -1 && a.v === "akt" },
+  { id:"kp", name:"Perfektstamm Passiv", hint:"PPP + esse",
+    f:a => PERF_T.indexOf(a.t) > -1 && a.v === "pass" },
+  { id:"kj", name:"Nur Konjunktiv",      hint:"alle vier Konjunktiv-Tempora",
+    f:a => a.m === "konj" },
+  { id:"ind",name:"Nur Indikativ",       hint:"alle sechs Tempora",
+    f:a => a.m === "ind" },
+  { id:"all",name:"Alle Formen",         hint:"das komplette Blatt",
+    f:a => true }
+];
+
+const MODES = [
+  { id:"smart",  label:"Klug" },
+  { id:"weak",   label:"Schwächste" },
+  { id:"wrong",  label:"Letzte Fehler" },
+  { id:"new",    label:"Nur neue" },
+  { id:"random", label:"Zufall" }
+];
+const SIZES = [{id:15,label:"15"},{id:30,label:"30"},{id:60,label:"60"},{id:0,label:"alle"}];
+
+const F = { verb:"all", mode:"smart", size:30 };
+
+/* =====================================================================
+   7. RUNDE BAUEN
+   ===================================================================== */
+function poolFor(deck){
+  return ITEMS.filter(it => {
+    if (F.verb !== "all" && it.verb !== F.verb) return false;
+    return it.an.some(deck.f);
+  });
+}
+function prio(it){
+  const p = PROG[it.id];
+  if (!p || !p.s) return 2.5;                 // ungesehen: mittlere Dringlichkeit
+  return p.b;
+}
+function shuffle(a){
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function buildQueue(deck){
+  let pool = poolFor(deck);
+  if (F.mode === "weak")   { const s = pool.filter(it => prio(it) <= 2 && seenCt(it.id) > 0);
+                             pool = s.length ? s : pool; }
+  if (F.mode === "wrong")  { const s = pool.filter(it => (PROG[it.id] || {}).lt > 1);
+                             pool = s.length ? s : pool; }
+  if (F.mode === "new")    { const s = pool.filter(it => seenCt(it.id) === 0);
+                             pool = s.length ? s : pool; }
+  shuffle(pool);
+  if (F.mode === "smart" || F.mode === "weak")
+    pool.sort((x, y) => prio(x) - prio(y));
+  const n = F.size ? Math.min(F.size, pool.length) : pool.length;
+  const chosen = pool.slice(0, n);
+  return shuffle(chosen).map(it => it.id);
+}
+
+let S = null;   // laufende Runde
+const A = { p:null, n:null, t:null, m:null, v:null };
+let checked = false, curRef = null;
+
+/* =====================================================================
+   8. ANSICHTEN
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const VIEWS = { start:"#view-start", drill:"#view-drill", result:"#view-result",
+                tables:"#view-tables", stats:"#view-stats" };
+function show(v){
+  Object.keys(VIEWS).forEach(k => { $(VIEWS[k]).hidden = (k !== v); });
+  const tabOf = { start:"start", drill:"start", result:"start", tables:"tables", stats:"stats" };
+  document.querySelectorAll("nav.tabs button").forEach(b =>
+    b.setAttribute("aria-current", String(b.dataset.view === tabOf[v])));
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => {
+  const v = b.dataset.view;
+  if (v === "start") renderStart();
+  if (v === "tables") renderTables();
+  if (v === "stats") renderStats();
+  show(v);
+});
+
+function chipRow(host, opts, current, onPick, small){
+  host.innerHTML = "";
+  opts.forEach(o => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip" + (small ? " sm" : "");
+    b.textContent = o.label;
+    b.setAttribute("aria-pressed", String(o.id === current));
+    b.onclick = () => onPick(o.id);
+    host.appendChild(b);
+  });
+}
+
+/* ---------- Startseite ---------- */
+function renderStart(){
+  const verbOpts = [{ id:"all", label:"alle" }]
+    .concat(VERBS.map(v => ({ id:v.id, label:v.head })))
+    .concat([{ id:"esse", label:"esse" }]);
+  chipRow($("#f-verb"), verbOpts, F.verb, id => { F.verb = id; renderStart(); }, true);
+  chipRow($("#f-mode"), MODES, F.mode, id => { F.mode = id; renderStart(); }, true);
+  chipRow($("#f-size"), SIZES, F.size, id => { F.size = id; renderStart(); }, true);
+
+  const host = $("#decks"); host.innerHTML = "";
+  DECKS.forEach(d => {
+    const pool = poolFor(d);
+    const counts = [0,0,0,0,0,0];
+    pool.forEach(it => counts[box(it.id)]++);
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "deck";
+    b.disabled = pool.length === 0;
+    b.innerHTML =
+      '<span class="deck-head"><span class="deck-name">' + esc(d.name) + '</span>' +
+      '<span class="deck-n">' + pool.length + " Formen</span></span>" +
+      '<span class="deck-n" style="margin:0">' + esc(d.hint) + "</span>" +
+      '<span class="bar">' + counts.map((c, i) =>
+        c ? '<i class="b' + i + '" style="flex:' + c + '"></i>' : "").join("") + "</span>";
+    b.onclick = () => startRound(d);
+    host.appendChild(b);
+  });
+}
+
+/* ---------- Runde ---------- */
+function startRound(deck, forcedIds){
+  const q = forcedIds && forcedIds.length ? shuffle(forcedIds.slice()) : buildQueue(deck);
+  if (!q.length){ return; }
+  S = { deck:deck, name:deck.name, queue:q, total:q.length, done:0,
+        tries:{}, log:[], started:Date.now() };
+  show("drill");
+  nextQuestion();
+}
+
+function nextQuestion(){
+  checked = false; curRef = null;
+  A.p = A.n = A.t = A.m = A.v = null;
+  $("#q-fb").hidden = true;
+  $("#q-check").textContent = "Prüfen";
+  $("#q-check").disabled = true;
+  $("#q-kbd").textContent = "Enter = Prüfen";
+
+  if (!S.queue.length){ finishRound(); return; }
+  const it = BY_ID.get(S.queue[0]);
+  const verb = VERB_BY_ID.get(it.verb);
+  $("#m-deck").textContent = S.name;
+  $("#m-count").textContent = S.done + "/" + S.total;
+  $("#m-fill").style.width = (S.total ? (S.done / S.total * 100) : 0) + "%";
+  $("#q-form").textContent = it.form;
+  $("#q-meta").innerHTML = esc(verb.head) + " &nbsp;·&nbsp; " + esc(verb.de);
+  renderAnswerRows();
+}
+
+const CATS = [
+  { k:"p", label:"Person",  opts:[{id:0,label:"1."},{id:1,label:"2."},{id:2,label:"3."}] },
+  { k:"n", label:"Numerus", opts:[{id:"sg",label:"Singular"},{id:"pl",label:"Plural"}] },
+  { k:"t", label:"Tempus",  opts:["praes","impf","futI","perf","plqp","futII"]
+              .map(t => ({ id:t, label:T_LABEL[t] })) },
+  { k:"m", label:"Modus",   opts:[{id:"ind",label:"Indikativ"},{id:"konj",label:"Konjunktiv"}] },
+  { k:"v", label:"Genus",   opts:[{id:"akt",label:"Aktiv"},{id:"pass",label:"Passiv"}] }
+];
+
+function renderAnswerRows(){
+  const host = $("#q-rows"); host.innerHTML = "";
+  CATS.forEach(cat => {
+    const row = document.createElement("div");
+    row.className = "qrow";
+    const lab = document.createElement("p");
+    lab.className = "eyebrow"; lab.textContent = cat.label;
+    const chips = document.createElement("div");
+    chips.className = "chips"; chips.dataset.cat = cat.k;
+    cat.opts.forEach(o => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "chip"; b.textContent = o.label;
+      b.dataset.val = String(o.id);
+      b.setAttribute("aria-pressed", "false");
+      b.onclick = () => {
+        if (checked) return;
+        A[cat.k] = o.id;
+        chips.querySelectorAll(".chip").forEach(c =>
+          c.setAttribute("aria-pressed", String(c === b)));
+        $("#q-check").disabled = !allPicked();
+      };
+      chips.appendChild(b);
+    });
+    row.appendChild(lab); row.appendChild(chips);
+    host.appendChild(row);
+  });
+}
+function allPicked(){
+  return A.p !== null && A.n !== null && A.t !== null && A.m !== null && A.v !== null;
+}
+function anEq(a){ return a.p === A.p && a.n === A.n && a.t === A.t && a.m === A.m && a.v === A.v; }
+function anText(a){
+  return P_LABEL[a.p] + " " + N_LABEL[a.n] + " · " + T_LABEL[a.t] + " " +
+         M_LABEL[a.m] + " · " + V_LABEL[a.v];
+}
+function bestMatch(it){
+  let best = it.an[0], score = -1;
+  it.an.forEach(a => {
+    let s = 0;
+    if (a.p === A.p) s++; if (a.n === A.n) s++; if (a.t === A.t) s++;
+    if (a.m === A.m) s++; if (a.v === A.v) s++;
+    if (s > score){ score = s; best = a; }
+  });
+  return best;
+}
+
+function doCheck(){
+  const it = BY_ID.get(S.queue[0]);
+  const hit = it.an.filter(anEq)[0];
+  const ok = !!hit;
+  const ref = ok ? hit : bestMatch(it);
+  curRef = ref;
+  checked = true;
+
+  S.tries[it.id] = (S.tries[it.id] || 0) + 1;
+  const p = rec(it.id);
+  p.s++; p.ts = Date.now();
+  if (ok) p.r++; else p.w++;
+
+  // Chips einfärben
+  CATS.forEach(cat => {
+    const chips = document.querySelector('.chips[data-cat="' + cat.k + '"]');
+    if (!chips) return;
+    chips.querySelectorAll(".chip").forEach(c => {
+      const val = c.dataset.val;
+      const isRef = String(ref[cat.k]) === val;
+      const isPick = String(A[cat.k]) === val;
+      if (isRef) c.classList.add("ok");
+      else if (isPick) c.classList.add("no");
+    });
+  });
+
+  const verb = VERB_BY_ID.get(it.verb);
+  const others = it.an.filter(a => a !== ref);
+  const fb = $("#q-fb");
+  fb.className = "fb" + (ok ? "" : " wrong");
+  fb.innerHTML =
+    '<div class="fb-verdict">' + (ok ? "Richtig" : "Falsch") + "</div>" +
+    '<div class="fb-form">' + renderForm(it.form, ref) + "</div>" +
+    '<div class="fb-an">' + esc(anText(ref)) + "</div>" +
+    '<div class="fb-de">' + esc(germanOf(verb, ref)) + "</div>" +
+    (others.length
+      ? '<div class="fb-note"><b>Mehrdeutig.</b> Dieselbe Form ist auch: ' +
+        others.map(a => esc(anText(a))).join(" &nbsp;|&nbsp; ") +
+        ". Beides wird als richtig gewertet.</div>"
+      : "") +
+    '<div class="fb-note">' + esc(verb.head) + ", " + esc(verb.kv) + " – " + esc(verb.de) +
+      (verb.cls ? " &nbsp;·&nbsp; " + esc(CLASSES[verb.cls].name) : " &nbsp;·&nbsp; unregelmäßig") +
+    "</div>";
+  fb.hidden = false;
+
+  $("#q-check").textContent = "Weiter";
+  $("#q-check").disabled = false;
+  $("#q-kbd").textContent = "Enter = Weiter";
+}
+
+function advance(){
+  const id = S.queue.shift();
+  const it = BY_ID.get(id);
+  const wasOk = it.an.some(anEq);
+  if (wasOk){
+    const n = S.tries[id];
+    const p = rec(id);
+    p.lt = n;
+    if (n === 1)      p.b = Math.min(5, p.b + 1);
+    else if (n === 2) p.b = Math.max(1, p.b);
+    else              p.b = 1;
+    S.done++;
+    S.log.push({ id:id, tries:n });
+  } else {
+    S.queue.splice(Math.min(4, S.queue.length), 0, id);   // kommt gleich wieder
+  }
+  save();
+  nextQuestion();
+}
+
+$("#q-check").onclick = () => { if (!checked) doCheck(); else advance(); };
+$("#q-quit").onclick = () => { if (S && S.log.length) finishRound(); else { renderStart(); show("start"); } };
+document.addEventListener("keydown", e => {
+  if ($("#view-drill").hidden) return;
+  if (e.key === "Enter" || (e.key === " " && checked)){
+    e.preventDefault();
+    if (!checked){ if (allPicked()) doCheck(); } else advance();
+  }
+});
+
+/* ---------- Ergebnis ---------- */
+function finishRound(){
+  const log = S.log;
+  const first = log.filter(l => l.tries === 1).length;
+  const buckets = [0,0,0,0,0];
+  log.forEach(l => buckets[Math.min(5, l.tries) - 1]++);
+  const rest = S.queue.length;
+
+  $("#r-title").textContent = S.name + (F.verb !== "all" ? " · " + VERB_BY_ID.get(F.verb).head : "");
+  $("#r-stats").innerHTML = [
+    ["Formen geschafft", log.length],
+    ["Sofort richtig", first],
+    ["Trefferquote", log.length ? Math.round(first / log.length * 100) + "%" : "–"],
+    ["Offen", rest]
+  ].map(x => '<div class="stat"><div class="n">' + x[1] + '</div><div class="l">' + x[0] + "</div></div>").join("");
+
+  const max = Math.max.apply(null, buckets.concat([1]));
+  $("#r-tally").innerHTML = buckets.map((b, i) =>
+    '<div class="' + (i === 0 ? "t1" : i === 1 ? "t2" : "t3") +
+    '" style="height:' + Math.max(2, Math.round(b / max * 100)) + '%"><span>' +
+    (b || "") + "</span></div>").join("");
+
+  const hard = log.filter(l => l.tries > 1).sort((a, b) => b.tries - a.tries);
+  $("#r-wrongbox").hidden = hard.length === 0;
+  $("#r-wrong").innerHTML = hard.map(l => {
+    const it = BY_ID.get(l.id);
+    return '<li><span class="w-form">' + renderForm(it.form, it.an[0]) + "</span>" +
+           '<span class="w-an">' + esc(anText(it.an[0])) + "</span>" +
+           '<span class="w-t">' + l.tries + "×</span></li>";
+  }).join("");
+  $("#r-again").hidden = hard.length === 0;
+  $("#r-again").onclick = () => startRound(S.deck, hard.map(l => l.id));
+  $("#r-new").onclick = () => startRound(S.deck);
+  $("#r-menu").onclick = () => { renderStart(); show("start"); };
+  show("result");
+}
+</script>
+<script>
+"use strict";
+
+/* =====================================================================
+   9. TABELLEN
+   ===================================================================== */
+const T_SECTIONS = [
+  { id:"pa", label:"Präsensstamm Aktiv",  kind:"stem", tenses:PRES_T, voice:"akt" },
+  { id:"pp", label:"Präsensstamm Passiv", kind:"stem", tenses:PRES_T, voice:"pass" },
+  { id:"ka", label:"Perfektstamm Aktiv",  kind:"stem", tenses:PERF_T, voice:"akt" },
+  { id:"kp", label:"Perfektstamm Passiv", kind:"stem", tenses:PERF_T, voice:"pass" },
+  { id:"nf", label:"Nominalformen",       kind:"nom" },
+  { id:"es", label:"esse",                kind:"esse" }
+];
+let tSec = "pa";
+
+function tableFor(tense, mood, voice){
+  let h = '<div class="tblock"><div class="tcap"><h2 class="sec">' +
+          esc(T_LABEL[tense] + " " + M_LABEL[mood]) + '</h2><span class="de">' +
+          esc(V_LABEL[voice]) + '</span></div><div class="tscroll"><table><thead><tr><th></th>' +
+          VERBS.map(v => "<th>" + esc(CLASSES[v.cls].short) + "<br>" + esc(v.head) + "</th>").join("") +
+          "</tr></thead><tbody>";
+  for (let i = 0; i < 6; i++){
+    h += "<tr><th>" + ROWS[i] + "</th>";
+    VERBS.forEach(v => {
+      const f = cell(v.id, tense, mood, voice, i);
+      const an = { p:i % 3, n:i < 3 ? "sg" : "pl", t:tense, m:mood, v:voice };
+      h += "<td>" + (f ? renderForm(f, an) : "—") + "</td>";
+    });
+    h += "</tr>";
+  }
+  return h + "</tbody></table></div></div>";
+}
+
+function nominalTable(){
+  const rows = [
+    ["Infinitiv Präsens Aktiv",  v => v.root + CLASSES[v.cls].inf_akt],
+    ["Infinitiv Präsens Passiv", v => v.root + CLASSES[v.cls].inf_pass],
+    ["Infinitiv Perfekt Aktiv",  v => v.perf + PERF.inf_akt],
+    ["Infinitiv Perfekt Passiv", v => v.ppp + "um esse"],
+    ["Imperativ Singular",       v => v.root + CLASSES[v.cls].imp_sg + "!"],
+    ["Imperativ Plural",         v => v.root + CLASSES[v.cls].imp_pl + "!"],
+    ["Partizip Präsens Aktiv",   v => v.root + CLASSES[v.cls].part],
+    ["Partizip Perfekt Passiv",  v => v.ppp + "us, -a, -um"],
+    ["Gerundium",                v => v.root + CLASSES[v.cls].ger],
+    ["Gerundivum",               v => v.root + CLASSES[v.cls].gerv]
+  ];
+  let h = '<div class="tblock"><div class="tcap"><h2 class="sec">Nominalformen &amp; Imperativ</h2>' +
+          '<span class="de">nicht abgefragt – zum Nachschlagen</span></div>' +
+          '<div class="tscroll"><table><thead><tr><th></th>' +
+          VERBS.map(v => "<th>" + esc(CLASSES[v.cls].short) + "</th>").join("") +
+          "</tr></thead><tbody>";
+  rows.forEach(r => {
+    h += "<tr><th>" + esc(r[0]) + "</th>" +
+         VERBS.map(v => "<td>" + esc(r[1](v)) + "</td>").join("") + "</tr>";
+  });
+  h += "</tbody></table></div></div>";
+  h += '<div class="tblock"><div class="tcap"><h2 class="sec">esse</h2></div><div class="tscroll"><table><tbody>' +
+       "<tr><th>Infinitiv</th><td>esse – sein</td></tr>" +
+       "<tr><th>Infinitiv Futur</th><td>futūrum esse / fore – sein werden</td></tr>" +
+       "<tr><th>Infinitiv Perfekt</th><td>fuisse – gewesen sein</td></tr>" +
+       "<tr><th>Imperativ</th><td>es! – sei! &nbsp; este! – seid!</td></tr>" +
+       "<tr><th>Partizip Futur</th><td>futūrus, -a, -um – einer, der sein wird</td></tr>" +
+       "</tbody></table></div></div>";
+  return h;
+}
+
+function esseTable(){
+  function blk(mood, tenses){
+    let h = '<div class="tblock"><div class="tcap"><h2 class="sec">esse · ' + M_LABEL[mood] +
+            '</h2><span class="de">Stämme es- / er- / s- / fu-</span></div>' +
+            '<div class="tscroll"><table><thead><tr><th></th>' +
+            tenses.map(t => "<th>" + esc(T_SHORT[t]) + "</th>").join("") + "</tr></thead><tbody>";
+    for (let i = 0; i < 6; i++){
+      h += "<tr><th>" + ROWS[i] + "</th>";
+      tenses.forEach(t => {
+        const f = cell("esse", t, mood, "akt", i);
+        const an = { p:i % 3, n:i < 3 ? "sg" : "pl", t:t, m:mood, v:"akt" };
+        h += "<td>" + (f ? renderForm(f, an) : "—") + "</td>";
+      });
+      h += "</tr>";
+    }
+    return h + "</tbody></table></div></div>";
+  }
+  let h = blk("ind", ["praes","impf","futI","perf","plqp","futII"]) +
+          blk("konj", ["praes","impf","perf","plqp"]);
+  h += '<div class="tblock"><div class="tcap"><h2 class="sec">Deutsch</h2></div><div class="tscroll"><table><tbody>' +
+       [["Präsens","ich bin / ich sei"],["Imperfekt","ich war / ich wäre"],
+        ["Futur I","ich werde sein"],["Perfekt","ich bin gewesen / ich sei gewesen"],
+        ["Plusquamperfekt","ich war gewesen / ich wäre gewesen"],
+        ["Futur II","ich werde gewesen sein"]]
+       .map(r => "<tr><th>" + r[0] + "</th><td>" + r[1] + "</td></tr>").join("") +
+       "</tbody></table></div></div>";
+  return h;
+}
+
+function renderTables(){
+  chipRow($("#t-nav"), T_SECTIONS.map(s => ({ id:s.id, label:s.label })), tSec,
+          id => { tSec = id; renderTables(); }, true);
+  const sec = T_SECTIONS.filter(s => s.id === tSec)[0];
+  let h = "";
+  if (sec.kind === "stem"){
+    ["ind","konj"].forEach(m => {
+      sec.tenses.forEach(t => {
+        if ((t === "futI" || t === "futII") && m === "konj") return;
+        h += tableFor(t, m, sec.voice);
+      });
+    });
+  } else if (sec.kind === "nom") h = nominalTable();
+  else h = esseTable();
+  $("#t-body").innerHTML = h;
+}
+
+/* =====================================================================
+   10. FORTSCHRITT
+   ===================================================================== */
+function renderStats(){
+  const counts = [0,0,0,0,0,0];
+  ITEMS.forEach(it => counts[box(it.id)]++);
+  const seen = ITEMS.filter(it => seenCt(it.id) > 0).length;
+  $("#s-head").textContent = seen + " von " + ITEMS.length + " Formen schon einmal gehabt";
+  $("#s-grid").innerHTML = counts.map((c, i) =>
+    '<div class="stat"><div class="n">' + c + '</div><div class="l">' + LVL[i] + "</div></div>").join("");
+
+  const worst = ITEMS
+    .filter(it => seenCt(it.id) > 0)
+    .sort((a, b) => {
+      const pa = PROG[a.id], pb = PROG[b.id];
+      return (pa.b - pb.b) || (pb.lt - pa.lt) || (pb.w - pa.w);
+    })
+    .slice(0, 20);
+  $("#s-worst").innerHTML = worst.length ? worst.map(it => {
+    const p = PROG[it.id];
+    return '<li><span class="w-form">' + renderForm(it.form, it.an[0]) + "</span>" +
+           '<span class="w-an">' + esc(anText(it.an[0])) + "</span>" +
+           '<span class="w-t">' + LVL[p.b] + " · " + p.w + " Fehler</span></li>";
+  }).join("") : '<li><span class="w-an">Noch nichts geübt.</span></li>';
+}
+
+$("#s-export").onclick = () => { $("#s-io").value = JSON.stringify(PROG); $("#s-io").select(); };
+$("#s-import").onclick = () => {
+  try {
+    const d = JSON.parse($("#s-io").value);
+    if (d && typeof d === "object"){ PROG = d; save(); renderStats(); renderStart(); }
+  } catch (e){ $("#s-io").value = "Das war kein gültiger Fortschritts-Text."; }
+};
+$("#s-reset").onclick = () => {
+  if (confirm("Wirklich den gesamten Fortschritt löschen?")){
+    PROG = {}; save(); renderStats(); renderStart();
+  }
+};
+
+/* =====================================================================
+   11. START
+   ===================================================================== */
+renderStart();
+show("start");
+</script>
