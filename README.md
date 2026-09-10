@@ -12,6 +12,22 @@ gespeichert und die Wiederholung danach gesteuert.
 `index.html` im Browser öffnen — kein Server, kein Build, keine Installation.
 Der Fortschritt liegt im `localStorage` des jeweiligen Browsers.
 
+## Aufs Handy als App
+
+`index.html` ist eine installierbare Web-App (PWA): Manifest, Icon und ein
+Service Worker, der alle Dateien in den Cache legt. Wird das Verzeichnis über
+**https** ausgeliefert, bietet der Browser auf dem Handy „Zum Startbildschirm
+hinzufügen" an — danach eigenes Icon, Vollbild ohne Adressleiste und Betrieb
+ohne Internet.
+
+Ausliefern lässt es sich zum Beispiel über GitHub Pages
+(*Settings → Pages → Deploy from a branch*, Branch wählen, Ordner `/ (root)`;
+bei privaten Repositories setzt das einen bezahlten Plan voraus) oder über
+jeden anderen Static-Host.
+
+Lokal per Doppelklick geöffnet (`file://`) läuft die App genauso, nur ohne
+Service Worker — die Registrierung wird dann übersprungen.
+
 ## Was drin ist
 
 **624 Formen / 660 Bestimmungen** aus fünf Musterverben und *esse*:
@@ -67,6 +83,9 @@ Einstellung bleibt gespeichert.
 | `app.html` | der eigentliche Inhalt: Paradigmen, Logik, Stil |
 | `build.sh` | erzeugt daraus die eigenständige `index.html` |
 | `index.html` | die fertige Seite (generiert — nicht direkt bearbeiten) |
+| `manifest.webmanifest` | Name, Icons und Anzeigemodus der installierten App |
+| `sw.js` | Service Worker für den Offline-Betrieb |
+| `icon.svg`, `icon-*.png`, `apple-touch-icon.png` | App-Icon (aus `icon.svg` gerendert) |
 
 Änderungen also in `app.html` machen und danach `./build.sh` laufen lassen.
 
